@@ -21,11 +21,29 @@ class Blockchain
 {
     constructor()
     {
-        this.chain=[];
+        this.chain=[this.createGenesisBlock()];
     }
 
     createGenesisBlock()
     {
         return new Block(0,"11/30/2021","starting block","8675309");
     }
+
+    getLatestBlock()
+    {
+        return this.chain[this.chain.length -1];
+    }
+
+    addBlock(newBlock)
+    {
+        newBlock.previousHash=this.getLatestBlock().hash;
+        newBlock.hash=newBlock.calculateHash();
+        this.chain.push(newBlock);
+    }
 }
+
+let jennyFromTheBlock = new Blockchain();
+jennyFromTheBlock.addBlock(new Block(1,"12/01/2021",{Jenny: "i got your number"}));
+jennyFromTheBlock.addBlock(new Block(2,"12/01/2021",{Jenny:"don't change your number"}));
+
+console.log(JSON.stringify(jennyFromTheBlock,null,4));
