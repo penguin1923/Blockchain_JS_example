@@ -9,11 +9,24 @@ class Block
         this.data=data;
         this.previousHash=previousHash;
         this.hash = this.calculateHash();
+        //part 2
+        this.nonce = 0;
     }
 
     calculateHash()
     {
-        return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data)).toString();
+        return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nonce).toString();
+    }
+
+    //part 2
+    mineBlock(difficulty)
+    {
+        while(this.hash.substring(0,difficulty) !== Array(difficulty + 1).join("0"))
+        {
+            this.nonce++;
+            this.hash=this.calculateHash();
+        }
+        console.log("Block mined: "+this.hash);
     }
 }
 
@@ -21,7 +34,8 @@ class Blockchain
 {
     constructor()
     {
-        this.chain=[this.createGenesisBlock()];
+        this.chain = [this.createGenesisBlock()];
+        this.difficulty = 4;
     }
 
     createGenesisBlock()
@@ -37,7 +51,10 @@ class Blockchain
     addBlock(newBlock)
     {
         newBlock.previousHash=this.getLatestBlock().hash;
-        newBlock.hash=newBlock.calculateHash();
+        //removed in part 2
+        //newBlock.hash=newBlock.calculateHash();
+        //added in part 2
+        newBlock.mineBlock(this.difficulty);
         this.chain.push(newBlock);
     }
     //integrity verification
@@ -64,15 +81,16 @@ class Blockchain
 
 let jennyFromTheBlock = new Blockchain();
 
+//video 1 blocks
 //created a couple of block for the purpose of seeing the chain play out
-jennyFromTheBlock.addBlock(new Block(1,"12/01/2021",{Jenny: "i got your number"}));
-jennyFromTheBlock.addBlock(new Block(2,"12/02/2021",{Jenny:"don't change your number"}));
+//jennyFromTheBlock.addBlock(new Block(1,"12/01/2021",{Jenny: "i got your number"}));
+//jennyFromTheBlock.addBlock(new Block(2,"12/02/2021",{Jenny:"don't change your number"}));
 
 //node main.js
 //console.log(JSON.stringify(jennyFromTheBlock,null,4));
 
 //test validity
-console.log('Is blockchain valid? '+ jennyFromTheBlock.isChainValid());
+//console.log('Is blockchain valid? '+ jennyFromTheBlock.isChainValid());
 
 //test 1
 //jennyFromTheBlock.chain[1].data = {Jenny: "i got your numbers"};
@@ -86,3 +104,10 @@ console.log('Is blockchain valid? '+ jennyFromTheBlock.isChainValid());
 //jennyFromTheBlock.chain[1].data = {Jenny: "i got your numbers"};
 //jennyFromTheBlock.chain[1].hash = jennyFromTheBlock.chain[1].calculateHash();
 //console.log('Should be false: '+ jennyFromTheBlock.isChainValid());
+
+//video 2 blocks 
+console.log('Mining Block 1...');
+jennyFromTheBlock.addBlock(new Block(1,"12/01/2021",{Jenny: "i got your number"}));
+
+console.log('Mining Block 2...');
+jennyFromTheBlock.addBlock(new Block(2,"12/02/2021",{Jenny:"don't change your number"}));
