@@ -1,4 +1,4 @@
-const SHA256 = require("crypto-js/sha256");
+const SHA256 = require('crypto-js/sha256');
 
 class Block
 {
@@ -8,7 +8,7 @@ class Block
         this.timestamp=timestamp;
         this.data=data;
         this.previousHash=previousHash;
-        this.hash = this.calculateHash;
+        this.hash = this.calculateHash();
     }
 
     calculateHash()
@@ -31,7 +31,7 @@ class Blockchain
 
     getLatestBlock()
     {
-        return this.chain[this.chain.length -1];
+        return this.chain[this.chain.length-1];
     }
 
     addBlock(newBlock)
@@ -43,7 +43,9 @@ class Blockchain
 }
 
 let jennyFromTheBlock = new Blockchain();
-jennyFromTheBlock.addBlock(new Block(1,"12/01/2021",{Jenny: "i got your number"}));
-jennyFromTheBlock.addBlock(new Block(2,"12/01/2021",{Jenny:"don't change your number"}));
 
+//created a couple of block for the purpose of seeing the chain play out
+jennyFromTheBlock.addBlock(new Block(1,"12/01/2021",{Jenny: "i got your number"}));
+jennyFromTheBlock.addBlock(new Block(2,"12/02/2021",{Jenny:"don't change your number"}));
+//node main.js
 console.log(JSON.stringify(jennyFromTheBlock,null,4));
