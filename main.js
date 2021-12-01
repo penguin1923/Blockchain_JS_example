@@ -73,3 +73,11 @@ jennyFromTheBlock.addBlock(new Block(2,"12/02/2021",{Jenny:"don't change your nu
 
 //test validity
 console.log('Is blockchain valid?'+ jennyFromTheBlock.isChainValid());
+
+//test 1
+//jennyFromTheBlock.chain[1].data = {Jenny: "i got your numbers"};
+//console.log('Should be false: '+ jennyFromTheBlock.isChainValid());
+
+//test 2
+//jennyFromTheBlock.chain[1].data = {Jenny: "i got your number"};
+//console.log('Should be true: '+ jennyFromTheBlock.isChainValid());
