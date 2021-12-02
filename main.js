@@ -1,12 +1,23 @@
 const SHA256 = require('crypto-js/sha256');
 
+class Transaction
+{
+    constructor(fromAddress,toAddress,amount)
+    {
+        this.fromAddress=fromAddress;
+        this.toAddress=toAddress;
+        this.amount=amount;
+    }
+}
+
 class Block
 {
-    constructor(index,timestamp,data,previousHash ='')
+    constructor(timestamp,transactions,previousHash ='')
     {
-        this.index=index;
+        //removed in video 3
+        //this.index=index;
         this.timestamp=timestamp;
-        this.data=data;
+        this.transactions=transactions;
         this.previousHash=previousHash;
         this.hash = this.calculateHash();
         //part 2
@@ -36,11 +47,13 @@ class Blockchain
     {
         this.chain = [this.createGenesisBlock()];
         this.difficulty = 4;
+        this.pendingTransactions=[];
+        this.miningReward=100;
     }
 
     createGenesisBlock()
     {
-        return new Block(0,"11/30/2021","starting block","8675309");
+        return new Block("11/30/2021","starting block","8675309");
     }
 
     getLatestBlock()
@@ -48,6 +61,7 @@ class Blockchain
         return this.chain[this.chain.length-1];
     }
 
+    /*Removed in video 3
     addBlock(newBlock)
     {
         newBlock.previousHash=this.getLatestBlock().hash;
@@ -56,7 +70,23 @@ class Blockchain
         //added in part 2
         newBlock.mineBlock(this.difficulty);
         this.chain.push(newBlock);
+    }*/
+
+    //replaced addBlock()
+    minePendingTransactions(miningRewardAddress)
+    {
+        let block= new Block(Date.now(),this.pendingTransactions);
+        block.mineBlock(this.difficulty);
+
+        console.log('Block successfully mined!');
+        this.chain.push(block);
+
+        this.pendingTransactions =
+        [
+            new Transaction(null,miningRewardAddress,this.miningReward)
+        ];
     }
+
     //integrity verification
     isChainValid()
     {
@@ -106,8 +136,8 @@ let jennyFromTheBlock = new Blockchain();
 //console.log('Should be false: '+ jennyFromTheBlock.isChainValid());
 
 //video 2 blocks 
-console.log('Mining Block 1...');
-jennyFromTheBlock.addBlock(new Block(1,"12/01/2021",{Jenny: "i got your number"}));
+//console.log('Mining Block 1...');
+//jennyFromTheBlock.addBlock(new Block(1,"12/01/2021",{Jenny: "i got your number"}));
 
-console.log('Mining Block 2...');
-jennyFromTheBlock.addBlock(new Block(2,"12/02/2021",{Jenny:"don't change your number"}));
+//console.log('Mining Block 2...');
+//jennyFromTheBlock.addBlock(new Block(2,"12/02/2021",{Jenny:"don't change your number"}));
