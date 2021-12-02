@@ -87,6 +87,32 @@ class Blockchain
         ];
     }
 
+    createTransaction(transaction)
+    {
+        this.pendingTransactions.push(transaction);
+    }
+
+    getBalanceOfAddress(address)
+    {
+        let balance=0;
+
+        for(const block of this.chain)
+        {
+            for(const trans of block.transactions)
+            {
+                if(trans.fromAddress === address)
+                {
+                    balance -= trans.amount;
+                }
+                if(trans.toAddress === address)
+                {
+                    balance += trans.amount;
+                }
+            }
+        }
+        return balance;
+    }
+
     //integrity verification
     isChainValid()
     {
@@ -141,3 +167,21 @@ let jennyFromTheBlock = new Blockchain();
 
 //console.log('Mining Block 2...');
 //jennyFromTheBlock.addBlock(new Block(2,"12/02/2021",{Jenny:"don't change your number"}));
+
+//video 3 blocks
+jennyFromTheBlock.createTransaction(new Transaction('address1','address2',100));
+jennyFromTheBlock.createTransaction(new Transaction('address2','address1',53));
+
+console.log('\n Starting the miner...');
+jennyFromTheBlock.minePendingTransactions('jennys-wallet');
+
+console.log('\n Balance of Jennys wallet is ', jennyFromTheBlock.getBalanceOfAddress('jennys-wallet'));
+console.log('\n Balance of address1 wallet is ', jennyFromTheBlock.getBalanceOfAddress('address1'));
+console.log('\n Balance of address2 wallet is ', jennyFromTheBlock.getBalanceOfAddress('address2'));
+
+console.log('\n Starting the miner...');
+jennyFromTheBlock.minePendingTransactions('jennys-wallet');
+
+console.log('\n Balance of Jennys wallet is ', jennyFromTheBlock.getBalanceOfAddress('jennys-wallet'));
+console.log('\n Balance of address1 wallet is ', jennyFromTheBlock.getBalanceOfAddress('address1'));
+console.log('\n Balance of address2 wallet is ', jennyFromTheBlock.getBalanceOfAddress('address2'));
